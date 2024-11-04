@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.myaws.myapp.domain.MemberVo;
 import com.myaws.myapp.persistance.MemberMapper;
+import com.mysql.cj.protocol.x.SyncFlushDeflaterOutputStream;
 
 
 @Service
@@ -24,6 +25,23 @@ public class MemberServiceImpl implements MemberService{
 	public int memberInsert(MemberVo mv) {
 		int value = mm.memberInsert(mv);
 		return value;
+	}
+	
+	@Override 
+	public int memberIdCheck(String memberId) {
+		
+		int value= mm.memberIdCheck(memberId);
+		
+		return value;
+		
+	}
+
+
+	@Override
+	public MemberVo memberLoginCheck(String memberId) {
+		MemberVo mv = mm.memberLoginCheck(memberId);
+		System.out.println("mv:"+mv);
+		return mv;
 	}
 
 }

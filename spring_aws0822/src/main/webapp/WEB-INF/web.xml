@@ -6,7 +6,11 @@
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+		<param-value>
+		classpath:config/root-context.xml
+		classpath:config/security.xml
+		
+		</param-value>
 	</context-param>
 	
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
@@ -21,7 +25,7 @@
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<!-- 디스패쳐서블릿은 이 파일 안에 있는 대로 활동을 하겠다, 라는뜻임 -->
-			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+			<param-value>classpath:config/servlet-context.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -30,6 +34,20 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>*.aws</url-pattern>
 	</servlet-mapping>
+	
+	
+	<filter>
+	<filter-name>encodingFilter</filter-name>
+	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+	<init-param>
+	<param-name>encoding</param-name>
+	<param-value>UTF-8</param-value>  
+	</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 	
 	
 

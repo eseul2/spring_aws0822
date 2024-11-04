@@ -4,7 +4,7 @@
 <HEAD>
 <TITLE> 회원가입</TITLE>
 <link href= "/resources/css/style.css" type-"text/css" rel="stylesheet" >
-<!-- CDN주소 제이퉈리 사용하는주소 -->
+<!-- CDN주소 제이쿼리 사용하는주소 -->
 <script src="https://code.jquery.com/jquery-latest.min.js"></script> 
 <script>
 
@@ -59,13 +59,11 @@ function check() {
 	}else if(hobbyCheck()==false) {
 		alert("취미를 1개 이상 선택해주세요");
 		return;
-	}
-	
-	/* else if(fm.btn.value=="N"){
-	alert("아이디를 중복체크를 해주세요");
-	fm.memberid.focus(); 
-	return;
-} */
+	}else if(fm.btn.value=="N"){
+		alert("아이디를 중복체크를 해주세요");
+		fm.memberid.focus(); 
+		return;
+	} 
 	
 	var ans = confirm("저장하시겠습니까?");
 	
@@ -75,14 +73,7 @@ function check() {
 		fm.method="post";
 		fm.submit();	
 	}
-	
-	// html 홈태그 기능을 자바스크립트로 제어 
-	/* fm.action="./memberJoinAction.jsp";
-	fm.method="post";
-	fm.submit();
-	 */
-	 
-	 alert("저장되었습니다!");
+
 	return; // 리턴에 값을 안쓰면 그냥 멈춤 종료
 }
 
@@ -116,7 +107,7 @@ $(document).ready(function(){
 		return;
 	}
 	
-	$.ajax({	// ajax 형식
+	$.ajax({	// ajax형식 자바스크립트와 제이슨을 비동기 통신을 하는 방식이다.
 		type : "post",	//전송방식
 		url : "<%=request.getContextPath()%>/member/memberIdCheck.aws", 
 		dataType : "json",	// json타입은 문서에서 {"키값" : "value값","키값2" : "value값2"}
