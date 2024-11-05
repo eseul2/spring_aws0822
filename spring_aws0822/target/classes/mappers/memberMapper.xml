@@ -20,6 +20,11 @@ select * from member where memberid = #{memberid}
 </select>
 
 
+<select id="memberSelectAll" resultType="mv">
+select * from member where delyn='N' order by midx desc
+</select>
+
+
 </mapper>
 
 

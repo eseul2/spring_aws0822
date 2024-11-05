@@ -6,7 +6,17 @@
 <title>스프링 학습하기</title>
 </head>
 <body>
+<!-- 회원번호가 있으면 담아놓은 회원이름을 출력하고 로그아웃 버튼을 만들어놓는다. -->
+<% if(session.getAttribute("midx")!= null) {
+	out.println(session.getAttribute("memberName") + "님, 로그아웃");
+}%>
+
+
 <a href ="<%=request.getContextPath()%>member/memberJoin.aws">회원가입 페이지</a>
 <a href ="<%=request.getContextPath()%>member/memberLogin.aws">회원 로그인 페이지</a>
+<a href ="<%=request.getContextPath()%>member/memberList.aws">회원 목록 가기</a>
 </body>
 </html>
+
+
+
