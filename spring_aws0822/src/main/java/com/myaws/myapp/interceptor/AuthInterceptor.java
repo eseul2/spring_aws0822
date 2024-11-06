@@ -37,6 +37,9 @@ public class AuthInterceptor extends HandlerInterceptorAdapter{
 	}
 	
 	
+	
+	
+	//사용자가 특정 페이지를 방문할 때 그 페이지의 URL을 세션에 저장하는 기능
 	public void saveUrl(HttpServletRequest request) {
 		
 		String uri = request.getRequestURI();  // 전체경로 주소  
@@ -52,7 +55,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter{
 		// 최종적으로 이동할 페이지
 		String locationUrl = uri+param;
 		
-		HttpSession session = request.getSession(); // 세션 갹채 가져온다.
+		HttpSession session = request.getSession(); // 세션 객체 가져온다.
 		if(request.getMethod().equals("GET")) { // 대문자 GET
 			session.setAttribute("saveUrl",locationUrl);
 		}

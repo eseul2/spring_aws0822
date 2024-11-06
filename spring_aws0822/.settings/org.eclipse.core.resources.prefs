@@ -1,3 +1,6 @@
 eclipse.preferences.version=1
+encoding//src/main/java/com/myaws/myapp/domain/Criteria.java=UTF-8
 encoding//src/main/java/com/myaws/myapp/domain/MemberVo.java=UTF-8
+encoding//src/main/java/com/myaws/myapp/domain/PageMaker.java=UTF-8
+encoding//src/main/java/com/myaws/myapp/domain/SearchCriteria.java=UTF-8
 encoding//src/main/webapp/WEB-INF/views/home.jsp=UTF-8
