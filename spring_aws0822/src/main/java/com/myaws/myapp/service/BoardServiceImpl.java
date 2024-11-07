@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.myaws.myapp.domain.BoardVo;
 import com.myaws.myapp.domain.SearchCriteria;
@@ -33,7 +34,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public ArrayList<BoardVo> boardSelectAll(SearchCriteria scri) {
 		
-		// HashMap 객체를 생성하여 페이징, 검색 타입, 키워드 등의 조건을 추가
+		// HashMap 객체를 생성하여 페이징, 검색 타입, 키워드 등의 조건을 추가. ArrayList처럼 담는다.
 		HashMap<String,Object> hm = new HashMap<String,Object>();
 		hm.put("startPageNum",(scri.getPage()-1)* scri.getPerPageNum()); // 시작 페이지 번호
 		hm.put("searchType", scri.getSearchType());  // 검색 유형
@@ -52,6 +53,29 @@ public class BoardServiceImpl implements BoardService {
 		// 검색 조건을 통해 BoardMapper에서 총 게시글 수를 조회		
 		int cnt = bm.boardTotalCount(scri);
 		return cnt;
+	}
+
+
+
+	@Override
+	@Transactional
+	public int boardInsert(BoardVo bv) {
+		
+		int value = bm.boardInsert(bv);
+		int maxBidx = bv.getBidx();
+		int value2 = bm.boardOriginbidxUpdate(maxBidx);
+		
+	
+		return value+value2;
+	}
+
+
+
+	@Override
+	public BoardVo boardSelectOne(int bidx) {
+		
+		BoardVo bv = bm.boardSelectOne(bidx);
+		return bv;
 	}
 
 }

@@ -2,6 +2,7 @@ package com.myaws.myapp.persistance;
 
 import java.util.ArrayList;
 
+import com.myaws.myapp.domain.BoardVo;
 import com.myaws.myapp.domain.MemberVo;
 
 public interface MemberMapper {

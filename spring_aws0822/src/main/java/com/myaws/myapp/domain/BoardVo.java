@@ -18,11 +18,19 @@ public class BoardVo {
 		private String contents;
 		private String subject;
 		private String writer;
-		private String filename;
+		//private String filename;
 		private String ip;
 		private String password;
+		private String uploadedFilename;
 		
-		 //3. 技磐 霸磐 积己
+		
+		public String getUploadedFilename() {
+			return uploadedFilename;
+		}
+		public void setUploadedFilename(String uploadedFilename) {
+			this.uploadedFilename = uploadedFilename;
+		}
+		//3. 技磐 霸磐 积己
 		public String getDelyn() {
 			return delyn;
 		}
@@ -101,12 +109,11 @@ public class BoardVo {
 		public void setWriter(String writer) {
 			this.writer = writer;
 		}
-		public String getFilename() {
-			return filename;
-		}
-		public void setFilename(String filename) {
-			this.filename = filename;
-		}
+
+		/*
+		 * public String getFilename() { return filename; } public void
+		 * setFilename(String filename) { this.filename = filename; }
+		 */
 		public String getIp() {
 			return ip;
 		}

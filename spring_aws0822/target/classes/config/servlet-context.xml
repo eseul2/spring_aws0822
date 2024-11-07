@@ -9,6 +9,9 @@
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
+
+	
+	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
 
@@ -22,14 +25,14 @@
 	</beans:bean>
 	
 	
-	<!-- <beans:bean id="uploadPath" class="java.lang.String">
+	<beans:bean id="uploadPath" class="java.lang.String">
 	<beans:constructor-arg value="D:/dev/springUpload"></beans:constructor-arg>
 	</beans:bean>
 	
 	<beans:bean id="multipartResolver" 
 	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	<beans:property name="maxUploadSize" value="10485760" />	
-	</beans:bean> -->
+	</beans:bean>
 	
 	<beans:bean id="loginInterceptor" class="com.myaws.myapp.interceptor.LoginInterceptor">
 	</beans:bean>
@@ -48,6 +51,7 @@
 	<interceptors>
 	<interceptor>
 	<mapping path="/member/memberList.aws"/>
+	<mapping path="/board/boardWrite.aws"/>
 	<beans:ref bean = "authInterceptor"/>
 	</interceptor>
 	</interceptors>	

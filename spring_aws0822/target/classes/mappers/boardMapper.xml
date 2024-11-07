@@ -34,6 +34,24 @@ select count(*) as cnt from board where delyn='N'
 <include refid="search"/> <!-- 검색 필터링 조건 포함 -->
 </select>
 
+<insert id="boardInsert" parameterType="bv">
+<selectKey keyProperty="bidx" resultType="int" order="AFTER"> <!-- insert를 실행시키고 나서 selectkey를 실행해라  -->
+select max(bidx) as bidx from board 
+</selectKey>
+insert into board(originbidx,depth,level_,subject,contents,writer,password,midx,filename,ip)
+value(null,0,0,#{subject},#{contents},#{writer},#{password},#{midx},#{uploadedFilename},#{ip})
+</insert>
+
+
+<update id="boardOriginbidxUpdate" parameterType="int">
+update board set originbidx = #{bidx} where bidx = #{bidx}
+</update>
+
+
+<select id="boardSelectOne" parameterType="int" resultType="bv">
+select * from board where delyn='N' and bidx= #{bidx}
+</select>
+
 
 </mapper>
 
