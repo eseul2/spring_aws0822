@@ -124,7 +124,7 @@ function check() {
 		<td style="text-align:center">비밀번호<input type="password" name="password" style="width: 150px;"></td>
 	</tr>
 	<tr>
-		<td>첨부파일<input type="file" name="filename"></td>
+		<td>첨부파일<input type="file" name="attachfile"></td>
 	</tr>
 	<tr> 
 		<td><button type ="button" onclick="check()">저장</button></td>

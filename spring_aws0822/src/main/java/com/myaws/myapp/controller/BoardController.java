@@ -1,6 +1,8 @@
 package com.myaws.myapp.controller;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
@@ -8,9 +10,14 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +33,7 @@ import com.myaws.myapp.domain.PageMaker;
 import com.myaws.myapp.domain.SearchCriteria;
 import com.myaws.myapp.service.BoardService;
 import com.myaws.myapp.service.MemberService;
+import com.myaws.myapp.util.MediaUtils;
 import com.myaws.myapp.util.UploadFileUtiles;
 
 @Controller
@@ -85,11 +93,11 @@ public class BoardController {
 	@RequestMapping(value= "boardWriteAction.aws")
 	public String boardWriteAction(
 		BoardVo bv, // 게시글 정보를 담고 있는 BoardVo 객체를 매개변수로 받음
-		@RequestParam("filename") MultipartFile filename, // 업로드된 파일을 받기 위한 MultipartFile 객체
+		@RequestParam("attachfile") MultipartFile attachfile, // 업로드된 파일을 받기 위한 MultipartFile 객체
 		HttpServletRequest request,
 		RedirectAttributes rttr
 		) throws Exception { // 윗단에 보고를 하는것
-		MultipartFile file = filename; //저장된 파일 이름 꺼내기 
+		MultipartFile file = attachfile; //저장된 파일 이름 꺼내기 
 		String uploadedFileName=""; // 파일이 업로드된 후 저장된 파일명을 저장할 변수
 		
 		if(! file.getOriginalFilename().equals("")) { // 해당 파일이 존재한다면
@@ -128,6 +136,61 @@ public class BoardController {
 		
 		String path="WEB-INF/board/boardContents";		
 		return path;
+	}
+	
+	
+	//이미지 같은것들이 다 바이트니까 바이트로 값을 받는다. 가상경로를 하나  만들어서 파일네임을 넘겨주고, 다운이라는 것도 함께 넘겨준다. 
+	// 만약 0이라면 넘기지 않는다. 
+	//미디어,http는 스프링으로 임포트하기
+	// 이 메서드를 통해서 화면에 보여질지, 다운로드를 할 것인지 할 수 있는 기능의 메서드.
+	@RequestMapping(value="/displayFile.aws", method=RequestMethod.GET)
+	public ResponseEntity<byte[]> displayFile(
+			@RequestParam("fileName") String fileName,
+			@RequestParam(value="down", defaultValue="0") int down   // 화면에 보여줄 것인가. 다운로드 하게 할 것인가?
+			) {
+		
+		ResponseEntity<byte[]> entity = null;  //객체를 담는 애인데 byte계열을 다 담는다. 
+		InputStream in = null;	// 데이터의 수로와 같은데, 처음에 읽어들이는 시작점이 InputStream
+		
+		try{
+			String formatName = fileName.substring(fileName.lastIndexOf(".")+1); // 확장자가 무엇인지 물어본다.
+			MediaType mType = MediaUtils.getMediaType(formatName); // 위에서 확장자를 꺼내서 미디어 유틸이라는 곳에 넣는다. 왜냐면 여기서 확장자가 무엇인지 타입을 알기 위해서 (png,jpg)
+			
+			HttpHeaders headers = new HttpHeaders();		
+			 
+			 // 파일 경로를 이용해 파일을 읽기 위해 InputStream 객체 생성
+			in = new FileInputStream(uploadPath+fileName);  // 위에서 초기화한 애를 객체생성시켜서 해당되는 파일 위치를 읽어들인다.
+			
+			
+			if(mType != null){ // 값이 해당되면 
+				if (down==1) { // 다운을 받으라는 얘기
+					fileName = fileName.substring(fileName.indexOf("_")+1);
+					headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+					headers.add("Content-Disposition", "attachment; filename=\""+
+							new String(fileName.getBytes("UTF-8"),"ISO-8859-1")+"\"");	
+				}else { // 0이라면 헤더에다가 해당되는 타입을 담아서 이미지를 뿌려준다. 
+					headers.setContentType(mType);	
+				}
+			}else{ // png 같은 것들이 아니면 여기로 이동. 
+				fileName = fileName.substring(fileName.indexOf("_")+1);
+				headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+				headers.add("Content-Disposition", "attachment; filename=\""+
+						new String(fileName.getBytes("UTF-8"),"ISO-8859-1")+"\"");				
+			}
+			entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), //배열에 in정보와 헤더, 상태값들을 생성자를 통해서 모두 담아서 리턴할것이다.
+					headers,
+					HttpStatus.CREATED);
+		}catch(Exception e){
+			e.printStackTrace();
+			entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+		}finally{
+			try {
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return entity;
 	}
 	
 	

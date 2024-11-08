@@ -18,12 +18,18 @@ public class BoardVo {
 		private String contents;
 		private String subject;
 		private String writer;
-		//private String filename;
+		private String filename;
 		private String ip;
 		private String password;
 		private String uploadedFilename;
 		
 		
+		public String getFilename() {
+			return filename;
+		}
+		public void setFilename(String filename) {
+			this.filename = filename;
+		}
 		public String getUploadedFilename() {
 			return uploadedFilename;
 		}
@@ -109,11 +115,7 @@ public class BoardVo {
 		public void setWriter(String writer) {
 			this.writer = writer;
 		}
-
-		/*
-		 * public String getFilename() { return filename; } public void
-		 * setFilename(String filename) { this.filename = filename; }
-		 */
+		 
 		public String getIp() {
 			return ip;
 		}

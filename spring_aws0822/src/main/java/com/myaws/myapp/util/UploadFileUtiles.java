@@ -24,7 +24,7 @@ public class UploadFileUtiles {
 									String originalName,byte[] fileData	)	
 	throws Exception{
 		
-		// UUID를 이용해 파일 이름을 중복 없이 생성
+		// UUID를 이용해 파일 이름을 중복 없이 생성 앞에 랜덤번호가 생성되고 뒤에 찐 이름이 나온다. 
 		UUID uid = UUID.randomUUID();
 		String savedName = uid.toString() +"_"+originalName;
 		
@@ -134,7 +134,7 @@ public class UploadFileUtiles {
 				path + 
 				File.separator + 
 				"s-"+fileName;
-		
+	//separator는 구분자인데 왜 이걸로 했냐면 운영체제마다 다르기 때문에 저걸로 통일?했다.
 	//	System.out.println("thumbnailName"+thumbnailName);
 		
 		File newFile = new File(thumbnailName);

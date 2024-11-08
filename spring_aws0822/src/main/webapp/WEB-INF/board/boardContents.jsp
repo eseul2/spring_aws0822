@@ -10,7 +10,7 @@
  }
  int midx =0;
  if(session.getAttribute("midx") != null) {
-	 midx = (int)session.getAttribute("midx");
+	 midx = Integer.parseInt(session.getAttribute("midx").toString());
  }
  %>   
     
@@ -24,7 +24,34 @@
 <script src="https://code.jquery.com/jquery-latest.min.js"></script> 
 <script> 
 
-<%-- function commentDel(cidx) {  // 버튼을 눌렀을때 삭제 기능
+//파일 이름을 받아서 해당 파일이 이미지 파일인지 확인하는 역할
+function checkImageType(fileName) {
+	var pattern = /jpg$|gif$|png$|jpeg$/i;   // 파일 확장자가 jpg, gif, png, jpeg로 끝나는지 검사하는 자바 정규표현식
+	return fileName.match(pattern); 		// 정규표현식과 일치하는지 확인
+}
+
+function getOriginalFileName(fileName) {  // 원본 파일이름 추출
+	var idx = fileName.lastIndexOf("_")+1; // 마지막 "_" 문자의 위치를 찾고 그 다음 위치를 저장
+	return fileName.substr(idx);   // idx 위치부터 문자열의 끝까지 반환
+}
+
+// 글자를 잘라내서 원본 파일을 다운받도록 한다. 
+function getImageLink(fileName) {
+	var front = fileName.substr(0,12); // 앞에서 12글자까지 가져온다.	
+	var end = fileName.substr(14); // 14번째 인덱스부터 끝까지 가져온다.
+	return front+end; // 두 부분을 이어 붙여 반환
+}
+
+function download(){
+	// 주소사이에 s-는 빼고 
+	
+	var downloadImage = getImageLink("<%=bv.getFilename()%>");
+	var downLink = "<%=request.getContextPath()%>/board/displayFile.aws?fileName="+downloadImage+"&down=1";
+	return downLink;
+}
+
+
+function commentDel(cidx) {  // 버튼을 눌렀을때 삭제 기능
 	
 	let ans = confirm("삭제하시겠습니까?");
 	
@@ -101,6 +128,12 @@ $.ajax({	// ajax 형식
 
 // 추천하기 
 $(document).ready(function(){
+	
+	$("#dUrl").click(function(){
+		$("a#dUrl").attr("href",download());
+		return;
+	});
+	
 	$.boardCommentList();
 	
 	$("#btn").click(function(){
@@ -169,7 +202,7 @@ $(document).ready(function(){
 		});
 	});
 	
-});	 --%>
+});	 
 
 	
 </script>
@@ -189,14 +222,14 @@ $(document).ready(function(){
 		<%=bv.getContents() %>	
 		
 	</div> 
-<%-- 	<% if (bv.getFilename() == null || bv.getFilename().equals("") ) {}else { %>
-	<img src="<%=request.getContextPath()%>/images/<%=bv.getFilename() %>">
+ 	<% if (bv.getFilename() == null || bv.getFilename().equals("") ) {}else { %>
+	<img src="<%=request.getContextPath()%>/board/displayFile.aws?fileName=<%=bv.getFilename()%>">
 	<P>
-	<a href="<%=request.getContextPath()%>/board/boardDownload.aws?filename=<%=bv.getFilename()%>" class="fileDown">	
+	<a id="dUrl" href="#" class="fileDown">	
 	첨부파일 다운로드
 	</a>
 	</P>
-	<%} %> --%>
+	<%} %> 
 	
 	
 <!-- </article> -->
