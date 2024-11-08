@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -130,6 +132,7 @@ public class BoardController {
 	@RequestMapping(value= "boardContents.aws")
 	public String boardContents(@RequestParam("bidx") int bidx, Model model) {
 		
+		boardService.boardViewCntUpdate(bidx);
 		BoardVo bv = boardService.boardSelectOne(bidx);
 		
 		model.addAttribute("bv", bv);
@@ -193,6 +196,61 @@ public class BoardController {
 		return entity;
 	}
 	
+	// 추천하기 기능 구현
+	@ResponseBody  //Java 객체를 JSON 형태로 변환해 클라이언트에게 보내는 역할
+	@RequestMapping(value="boardRecom.aws", method=RequestMethod.GET)
+	public JSONObject boardRecom(@RequestParam("bidx") int bidx) {
+		
+		int value = boardService.boardRecomUpdate(bidx);
+		
+		JSONObject js = new JSONObject();
+		js.put("recom", value);  // value값을 담아서 json에게 넘겨주기 
+		
+		return js;
+	}
+	
+	
+	
+	@RequestMapping(value="boardDelete.aws")
+	public String boardDelet(@RequestParam("bidx") int bidx,Model model){
+		
+		model.addAttribute("bidx",bidx);
+		String path="WEB-INF/board/boardDelete";
+		return path;
+	}
+	
+	
+	
+	// 삭제하기 기능
+	@RequestMapping(value="boardDeleteAction.aws", method=RequestMethod.POST)
+	public String boardDeleteAction(
+			@RequestParam("bidx") int bidx, 
+			@RequestParam("password") String password,
+			HttpSession session,
+			RedirectAttributes rttr
+			){
+		
+		BoardVo bv = boardService.boardSelectOne(bidx);
+	      int midx = Integer.parseInt(session.getAttribute("midx").toString());
+	      int value = boardService.boardDelete(bidx,midx,password);
+	      
+	      String path = "";
+	      if(bv.getMidx()==midx) {
+	         if(value==1) {
+	            path = "redirect:/board/boardList.aws";
+	         }else {
+	            rttr.addFlashAttribute("msg", "비밀번호가 틀렸습니다.");
+	            path = "redirect:/board/boardDelete.aws?bidx="+bidx;
+	         }
+	      }else {
+	         rttr.addFlashAttribute("msg", "글을 쓴 회원이 아닙니다.");
+	         path = "redirect:/board/boardDelete.aws?bidx="+bidx;
+	      }
+
+	      return path;  // .jsp는 WEB-INF/spring/appServlet/servlet-context.xml > 에서 붙어짐
+	}
+	
+
 	
 	
 	

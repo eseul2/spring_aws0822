@@ -11,6 +11,9 @@ public interface BoardService {
 	public int boardTotalCount(SearchCriteria scri);
 	public int boardInsert(BoardVo bv);
 	public BoardVo boardSelectOne(int bidx);
+	public int boardViewCntUpdate(int bidx);
+	public int boardRecomUpdate(int bidx);
+	public int boardDelete(int bidx, int midx, String password);
 
 }
 

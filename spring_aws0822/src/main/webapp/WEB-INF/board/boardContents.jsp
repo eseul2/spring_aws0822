@@ -129,12 +129,14 @@ $.ajax({	// ajax 형식
 // 추천하기 
 $(document).ready(function(){
 	
+	$("#dUrl").html(getOriginalFileName("<%=bv.getFilename()%>"));
+	
 	$("#dUrl").click(function(){
-		$("a#dUrl").attr("href",download());
+		$("#dUrl").attr("href",download());
 		return;
 	});
 	
-	$.boardCommentList();
+	//$.boardCommentList();
 	
 	$("#btn").click(function(){
 	//alert("추천버튼 클릭");
@@ -154,7 +156,6 @@ $(document).ready(function(){
 			alert("전송 실패");
 		}	
 	});
-	
 	});
 	
 	

@@ -52,6 +52,28 @@ update board set originbidx = #{bidx} where bidx = #{bidx}
 select * from board where delyn='N' and bidx= #{bidx}
 </select>
 
+<update id="boardViewCntUpdate" parameterType="int" >
+update board SET viewcnt = viewcnt+1 where bidx = #{bidx}
+</update>
+
+<!-- 게시물 추천하기 쿼리 구문 -->
+<update id="boardRecomUpdate" parameterType="bv" >
+	<selectKey keyProperty="recom" resultType="int" order="AFTER">
+	select recom from board where bidx = #{bidx}
+	</selectKey>
+	update board set recom= recom+1 where bidx= #{bidx}
+</update>
+
+
+<!-- 게시물 삭제하는 쿼리 구문 -->
+<update id="boardDelete" parameterType="HashMap">
+update board set delyn='Y', modifyday=now() where bidx= #{bidx} and midx=#{midx} and password=#{password}
+</update>
+
+
+
+
+
 
 </mapper>
 
