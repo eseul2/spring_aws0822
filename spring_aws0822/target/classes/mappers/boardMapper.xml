@@ -71,7 +71,26 @@ update board set delyn='Y', modifyday=now() where bidx= #{bidx} and midx=#{midx}
 </update>
 
 
+<!-- 게시물 수정 쿼리 --> 
+<update id="boardUpdate" parameterType="bv">
+update board set subject =#{subject}, contents =#{contents}, writer=#{writer}, modifyday= now(),filename=#{uploadedFilename} 
+where bidx=#{bidx} and password=#{password} and midx=#{midx}
+</update>
 
+
+<!-- 게시물 답변달기 쿼리  -->
+<update id="boardReplyUpdate" parameterType="bv">
+update board set depth= depth+1 where originbidx =#{originbidx}  and depth > #{depth}
+</update>
+
+<!-- 새 답변글을 넣으려는 쿼리 -->
+<insert id="boardReplyInsert" parameterType="bv">
+	<selectKey keyProperty="bidx" resultType="int" order="AFTER">
+	select max(bidx) as bidx from board 
+	</selectKey>
+insert into board (originbidx,depth,level_,subject,contents,writer,midx,filename,password,ip)
+values(#{originbidx},#{depth}+1,#{level_}+1,#{subject},#{contents},#{writer},#{midx},#{uploadedFilename},#{password},#{ip})
+</insert>
 
 
 

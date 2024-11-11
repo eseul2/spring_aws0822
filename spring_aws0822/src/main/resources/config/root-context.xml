@@ -61,6 +61,8 @@
 	</bean>
 	
 	<tx:annotation-driven/>
+	
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 
 	
 	

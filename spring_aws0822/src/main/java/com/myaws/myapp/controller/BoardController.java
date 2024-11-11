@@ -83,7 +83,7 @@ public class BoardController {
 	
 	
 	// 글쓰기 화면 보여주기 기능
-	@RequestMapping(value= "boardWrite.aws")
+	@RequestMapping(value= "boardWrite.aws", method=RequestMethod.GET)
 	public String boardWrite() {
 		
 		String path = "WEB-INF/board/boardWrite";
@@ -92,7 +92,7 @@ public class BoardController {
 	
 	
 	//게시판에서 글 작성과 파일 업로드 기능을 처리
-	@RequestMapping(value= "boardWriteAction.aws")
+	@RequestMapping(value= "boardWriteAction.aws", method=RequestMethod.POST)
 	public String boardWriteAction(
 		BoardVo bv, // 게시글 정보를 담고 있는 BoardVo 객체를 매개변수로 받음
 		@RequestParam("attachfile") MultipartFile attachfile, // 업로드된 파일을 받기 위한 MultipartFile 객체
@@ -129,7 +129,7 @@ public class BoardController {
 
 	
 	// 글 내용 보여주기 기능
-	@RequestMapping(value= "boardContents.aws")
+	@RequestMapping(value= "boardContents.aws", method=RequestMethod.GET)
 	public String boardContents(@RequestParam("bidx") int bidx, Model model) {
 		
 		boardService.boardViewCntUpdate(bidx);
@@ -211,7 +211,7 @@ public class BoardController {
 	
 	
 	
-	@RequestMapping(value="boardDelete.aws")
+	@RequestMapping(value="boardDelete.aws", method=RequestMethod.GET)
 	public String boardDelet(@RequestParam("bidx") int bidx,Model model){
 		
 		model.addAttribute("bidx",bidx);
@@ -250,7 +250,126 @@ public class BoardController {
 	      return path;  // .jsp는 WEB-INF/spring/appServlet/servlet-context.xml > 에서 붙어짐
 	}
 	
+	
+	
+	// 수정하기 화면 
+	@RequestMapping(value="boardModify.aws", method=RequestMethod.GET)
+	public String boardModify(@RequestParam("bidx") int bidx,Model model){
+		
+		// 게시물 내용을 조회하는 메서드
+		BoardVo bv = boardService.boardSelectOne(bidx);
+		model.addAttribute("bv", bv);
+		
+		String path="WEB-INF/board/boardModify";
+		return path;
+	}
+	
+	
+	
+	
+	//게시판에서 글 수정과 파일 업로드 기능을 처리
+	@RequestMapping(value= "boardModifyAction.aws", method=RequestMethod.POST)
+	public String boardModifyAction(
+		BoardVo bv, // 게시글 정보를 담고 있는 BoardVo 객체를 매개변수로 받음
+		@RequestParam("attachfile") MultipartFile attachfile, // 업로드된 파일을 받기 위한 MultipartFile 객체
+		HttpServletRequest request,
+		RedirectAttributes rttr
+		) throws Exception { // 윗단에 보고를 하는것
+		
+		MultipartFile file = attachfile; //저장된 파일 이름 꺼내기 
+		String uploadedFileName=""; // 파일이 업로드된 후 저장된 파일명을 저장할 변수
+			
+		if(! file.getOriginalFilename().equals("")) { // 해당 파일이 존재한다면
+			 // 파일을 서버에 저장하고 저장된 파일 이름을 반환받음
+			uploadedFileName = UploadFileUtiles.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes());
+		}
+		
+		String midx = request.getSession().getAttribute("midx").toString();
+		int midx_int = Integer.parseInt(midx); 
+		String ip = getUserIp(request);
+			
+		bv.setUploadedFilename(uploadedFileName);  // vo에 담아서 가져가기 
+		bv.setIp(ip);
+		
+		//수정 처리
+		int value = boardService.boardUpdate(bv); // 서비스에서 만든 메서드 호출하기
+			
+		String path="";
+		//게시글 작성자와 현재 로그인한 사용자의 midx를 비교하는 부분
+		if(bv.getMidx() == midx_int) {
+	        if(value == 1) {
+	           path = "redirect:/board/boardContents.aws?bidx=" + bv.getBidx();
+	        }else {
+	             rttr.addFlashAttribute("msg", "비밀번호가 틀렸습니다.");
+	             path = "redirect:/board/boardModify.aws?bidx=" + bv.getBidx();
+	         }
+	     }else {
+	         rttr.addFlashAttribute("msg", "자신의 게시글만 수정 할 수 있습니다.");
+	         path = "redirect:/board/boardModify.aws?bidx=" + bv.getBidx();
+	     }
+	            
+	     return path; 
+}		    
+	
+	
+	
+	// 답변하기 화면
+	@RequestMapping(value="boardReply.aws" , method=RequestMethod.GET)
+	public String boardReply(@RequestParam("bidx") int bidx,Model model){
+		
+		// 게시물 내용을 조회하는 메서드
+		BoardVo bv = boardService.boardSelectOne(bidx);
+			
+		model.addAttribute("bv", bv);
+		
+		String path="WEB-INF/board/boardReply";
+		return path;
+	}
 
+	
+	// 글 답변하기 기능
+	@RequestMapping(value= "boardReplyAction.aws", method=RequestMethod.POST)
+	public String boardReplyAction(
+		BoardVo bv, // 게시글 정보를 담고 있는 BoardVo 객체를 매개변수로 받음
+		@RequestParam("attachfile") MultipartFile attachfile, // 업로드된 파일을 받기 위한 MultipartFile 객체
+		HttpServletRequest request,
+		RedirectAttributes rttr
+		) throws Exception { // 윗단에 보고를 하는것
+			
+		
+		MultipartFile file = attachfile; //저장된 파일 이름 꺼내기 
+		String uploadedFileName=""; // 파일이 업로드된 후 저장된 파일명을 저장할 변수
+				
+		if(! file.getOriginalFilename().equals("")) { // 해당 파일이 존재한다면
+			 // 파일을 서버에 저장하고 저장된 파일 이름을 반환받음
+			uploadedFileName = UploadFileUtiles.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes());
+		}
+			
+		String midx = request.getSession().getAttribute("midx").toString();
+		int midx_int = Integer.parseInt(midx); 
+		String ip = getUserIp(request);
+				
+		bv.setUploadedFilename(uploadedFileName);  // vo에 담아서 가져가기 
+		bv.setMidx(midx_int);
+		bv.setIp(ip);
+		
+		int maxBidx = 0; // 최신 게시물 
+		maxBidx = boardService.boardReply(bv);
+		
+		String path="";
+		
+		if (maxBidx != 0) {  //성공 했을 경우 
+			path = "redirect:/board/boardContents.aws?bidx="+ maxBidx;
+		    } else {
+		    rttr.addFlashAttribute("msg", "답변이 등록되지 않았습니다.");
+		    path = "redirect:/board/boardReply.aws?bidx=" + bv.getBidx();	
+		}
+		    return path;
+	}		    
+	
+	
+	
+		
 	
 	
 	

@@ -114,4 +114,38 @@ public class BoardServiceImpl implements BoardService {
 		return cnt;
 	}
 
+
+
+	// 수정하기 
+	@Override
+	public int boardUpdate(BoardVo bv) {
+		
+		int value = bm.boardUpdate(bv); // bv값 넘겨주기 
+		return value;
+	}
+
+
+	@Transactional // 두개니까 하나로 묶기위한 트랜잭션
+	@Override
+	public int boardReply(BoardVo bv) {
+		// 업데이트를 먼저 한 번 하고, 입력하기를 만들어야 한다. 
+		// 그래서 메서드 두 개를 만들어야 한다.
+		int value = bm.boardReplyUpdate(bv);
+		int value2 = bm.boardReplyInsert(bv);  // 두개를 하나로 담아서 넘길거에용
+		int maxBidx = bv.getBidx();
+		
+		return maxBidx;
+	}
+	
+	
+
+
+
+	
+	
+	
+
+
+
+
 }

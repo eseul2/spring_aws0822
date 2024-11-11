@@ -20,6 +20,10 @@ public interface BoardMapper {
 	public int boardViewCntUpdate(int bidx);
 	public int boardRecomUpdate(BoardVo bv);
 	public int boardDelete(HashMap hm);
+	public int boardUpdate(BoardVo bv);
+	public int boardReply(BoardVo bv);
+	public int boardReplyUpdate(BoardVo bv);
+	public int boardReplyInsert(BoardVo bv);
 
 }
 

@@ -19,7 +19,7 @@
 <head>
 <meta charset="UTF-8">
 <title>글내용</title>
-<link href="/resources/css/style2.css" rel="stylesheet">
+<link href="<%=request.getContextPath() %>/resources/css/style2.css" rel="stylesheet">
 <!-- 제이쿼리 cdn 주소 -->
 <script src="https://code.jquery.com/jquery-latest.min.js"></script> 
 <script> 

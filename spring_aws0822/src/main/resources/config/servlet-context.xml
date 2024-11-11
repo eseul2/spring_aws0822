@@ -29,6 +29,7 @@
 	<beans:constructor-arg value="D:/dev/springUpload"></beans:constructor-arg>
 	</beans:bean>
 	
+	<!-- 얘를 사용함으로써 Multipart를 사용할 수 있다. 덕분에 이미지 파일을 처리할 수 있다 -->
 	<beans:bean id="multipartResolver" 
 	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	<beans:property name="maxUploadSize" value="10485760" />	
@@ -52,6 +53,9 @@
 	<interceptor>
 	<mapping path="/member/memberList.aws"/>
 	<mapping path="/board/boardWrite.aws"/>
+	<mapping path="/board/boardDelete.aws"/>
+	<mapping path="/board/boardModify.aws"/>
+	<mapping path="/board/boardReply.aws"/>
 	<mapping path="/board/boardWriteAction.aws"/>
 	<mapping path="/board/boardDeleteAction.aws"/>
 	<mapping path="/board/boardModifyAction.aws"/>
