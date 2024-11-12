@@ -69,7 +69,7 @@ function commentDel(cidx) {  // 버튼을 눌렀을때 삭제 기능
 				
 			},
 			error : function() {	// 결과가 실패했을 때 받는 영역 
-				alert("전송 실패");
+				alert("전송 실패1");
 			}	
 		});
 	}
@@ -82,18 +82,18 @@ $.boardCommentList = function(){  // 보드코멘트리스트 라는 이름의 �
 //alert("fff");
 $.ajax({	// ajax 형식
 	type : "get",	//전송방식 겟방식
-	url : "<%=request.getContextPath()%>/comment/commentList.aws?bidx=<%=bv.getBidx()%>", 
+	url : "<%=request.getContextPath()%>/comment/<%=bv.getBidx()%>/commentList.aws", 
 	dataType : "json",	// json타입은 문서에서 {"키값" : "value값","키값2" : "value값2"}
 	success : function(result){	//결과가 넘어와서 성공했을 때 받는 영역
 		
-		//alert("전송 성공 테스트");
+		alert("전송 성공 테스트");
 	
-		var strTr = "";
-		$(result).each(function(){
+	var strTr = "";
+	$(result.clist).each(function(){
 			
-			var btnn ="";
+		var btnn ="";
 			
-			 //현재로그인 사람과 댓글쓴 사람의 번호가 같을때만 나타내준다
+			//현재로그인 사람과 댓글쓴 사람의 번호가 같을때만 나타내준다
 			if (this.midx == "<%=midx%>") {
 				if (this.delyn=="N"){
 					btnn= "<button type='button' onclick='commentDel("+this.cidx+");'>삭제</button>";
@@ -121,7 +121,7 @@ $.ajax({	// ajax 형식
 	
 	},
 	error : function() {	// 결과가 실패했을 때 받는 영역 
-		alert("전송 실패");
+		alert("전송 실패2");
 	}	
  });
 }
@@ -136,7 +136,7 @@ $(document).ready(function(){
 		return;
 	});
 	
-	//$.boardCommentList();
+	$.boardCommentList();
 	
 	$("#btn").click(function(){
 	//alert("추천버튼 클릭");
@@ -153,7 +153,7 @@ $(document).ready(function(){
 			$("#btn").val(str);
 		},
 		error : function() {	// 결과가 실패했을 때 받는 영역 
-			alert("전송 실패");
+			alert("전송 실패3");
 		}	
 	});
 	});
@@ -198,7 +198,7 @@ $(document).ready(function(){
 				$.boardCommentList();
 			},
 			error : function() {	// 결과가 실패했을 때 받는 영역 
-				alert("전송 실패");
+				alert("전송 실패4");
 			}	
 		});
 	});
