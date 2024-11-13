@@ -79,15 +79,15 @@ function commentDel(cidx) {  // 버튼을 눌렀을때 삭제 기능
 
 // 제이쿼리로 함수 만들기 
 $.boardCommentList = function(){  // 보드코멘트리스트 라는 이름의 함수다.
-//alert("fff");
+	
+let block = $("#block").val();	
+	
 $.ajax({	// ajax 형식
 	type : "get",	//전송방식 겟방식
-	url : "<%=request.getContextPath()%>/comment/<%=bv.getBidx()%>/commentList.aws", 
+	url : "<%=request.getContextPath()%>/comment/<%=bv.getBidx()%>/"+block+"/commentList.aws", 
 	dataType : "json",	// json타입은 문서에서 {"키값" : "value값","키값2" : "value값2"}
 	success : function(result){	//결과가 넘어와서 성공했을 때 받는 영역
 		
-		//alert("전송 성공 테스트");
-	
 	var strTr = "";
 	$(result.clist).each(function(){
 			
@@ -118,7 +118,18 @@ $.ajax({	// ajax 형식
 			+"</tr>"+strTr+"</table>";		
 			
 		$("#commentListView").html(str);
-	
+		
+		
+		if(result.moreView == "N") {
+			$("#morebtn").css("display","none"); // 감춘다.
+		}else {
+			$("#morebtn").css("display","block"); // 보여준다
+		}
+		
+		if(result.nextBlock>block) {
+			$("#block").val(result.nextBlock);
+		}
+		
 	},
 	error : function() {	// 결과가 실패했을 때 받는 영역 
 		alert("전송 실패2");
@@ -186,14 +197,13 @@ $(document).ready(function(){
 				    "midx" : "<%=midx%>"
 				    },
 			dataType : "json",	// json타입은 문서에서 {"키값" : "value값","키값2" : "value값2"}
-			success : function(result){	//결과가 넘어와서 성공했을 때 받는 영역
-				
+			success : function(result){	//결과가 넘어와서 성공했을 때 받는 영역	
 				//alert("전송 성공 테스트");
 				//var str = "("+result.value+")";
 				//alert(str);
-				
 				if(result.value == 1) {
 					$("#ccontents").val("");    // 입력이 성공하면 댓글창을 비워라 
+					$("#block").val(1);
 				}
 				$.boardCommentList();
 			},
@@ -203,6 +213,9 @@ $(document).ready(function(){
 		});
 	});
 	
+	$("#more").click(function(){
+		$.boardCommentList();
+	})
 });	 
 
 	
@@ -252,7 +265,14 @@ $(document).ready(function(){
 	
 	
 <div id = "commentListView"></div>
-</article>
 
+<input type="hidden" id="block" value="1">
+<div id="morebtn" style="text-align:center; line-height:50px;">
+	<button type="button" id="more">더보기</button>
+</div>
+
+
+
+</article>
 </body>
 </html>

@@ -8,7 +8,12 @@
 
   <!-- 게시글 목록 조회 쿼리 -->
 <select id="commentSelectAll" parameterType="int" resultType="cv">
-select * from comment where delyn='N' and bidx=#{bidx} order by cidx desc
+select * from comment where delyn='N' and bidx=#{0} order by cidx desc limit 0,#{1}
+</select>
+
+
+<select id="commentTotalCnt" parameterType="int" resultType="int">
+select count(*) as cnt from comment where delyn='N' and bidx = #{bidx}
 </select>
 
 

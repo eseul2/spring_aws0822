@@ -37,15 +37,30 @@ public class CommentController {
 	
 	
 	
-	@RequestMapping(value="/{bidx}/commentList.aws")
+	@RequestMapping(value="/{bidx}/{block}/commentList.aws")
 	public JSONObject commentList(
-			@PathVariable("bidx") int bidx //이걸 통해서 그 bidx값을 꺼낼 수 있다.		
+			@PathVariable("bidx") int bidx, //이걸 통해서 그 bidx값을 꺼낼 수 있다.	
+			@PathVariable("block") int block
 			){
 		
-		JSONObject js = new JSONObject();
+		String moreView="";
+		int nextBlock=0; // 다음블럭
+		int cnt = commentService.commentTotalCnt(bidx);
 		
-		ArrayList<CommentVo> clist = commentService.commentSelectAll(bidx);
+		if(cnt > block*15) {
+			moreView = "Y";
+			nextBlock = block+1; // 하나씩 증가해주기	
+		}else {
+			moreView = "N";
+			nextBlock = block;
+		}
+	
+		ArrayList<CommentVo> clist = commentService.commentSelectAll(bidx,block);
+		
+		JSONObject js = new JSONObject();
 		js.put("clist", clist);   //제이슨에 담아서 화면에 가지고 갈거에용 
+		js.put("moreView", moreView);
+		js.put("nextBlock", nextBlock); 
 		
 		return js;  // 객체가 리턴된다.
 	}
