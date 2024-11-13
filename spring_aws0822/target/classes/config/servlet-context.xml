@@ -60,6 +60,7 @@
 	<mapping path="/board/boardDeleteAction.aws"/>
 	<mapping path="/board/boardModifyAction.aws"/>
 	<mapping path="/board/boardReplyAction.aws"/>
+	<mapping path="/board/commentWriteAction.aws"/>
 	<beans:ref bean = "authInterceptor"/>
 	</interceptor>
 	</interceptors>	

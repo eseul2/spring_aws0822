@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.myaws.myapp.domain.BoardVo;
 import com.myaws.myapp.domain.CommentVo;
 import com.myaws.myapp.persistance.CommentMapper;
 
@@ -24,5 +27,28 @@ public class CommentServiceImpl implements CommentService{
 		ArrayList<CommentVo> clist =  cm.commentSelectAll(bidx);		
 		return clist;
 	}
+
+	
+	
+	
+	@Override
+	public int commentInsert(CommentVo cv) {
+	
+		int value = cm.commentInsert(cv);
+
+		return value;
+	}
+
+
+	@Override
+	public int commentDelete(CommentVo cv) {
+		
+		int value = cm.commentDelete(cv);
+		
+		return value;
+	}
+	
+	
+	
 	
 }

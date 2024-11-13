@@ -59,7 +59,7 @@ function commentDel(cidx) {  // 버튼을 눌렀을때 삭제 기능
 		
 		$.ajax({	// ajax 형식
 			type : "get",	//전송방식 겟방식
-			url : "<%=request.getContextPath()%>/comment/commentDeleteAction.aws?cidx="+cidx, 
+			url : "<%=request.getContextPath()%>/comment/"+cidx+"/commentDeleteAction.aws", 
 			dataType : "json",	// json타입은 문서에서 {"키값" : "value값","키값2" : "value값2"}
 			success : function(result){	//결과가 넘어와서 성공했을 때 받는 영역
 				
@@ -86,7 +86,7 @@ $.ajax({	// ajax 형식
 	dataType : "json",	// json타입은 문서에서 {"키값" : "value값","키값2" : "value값2"}
 	success : function(result){	//결과가 넘어와서 성공했을 때 받는 영역
 		
-		alert("전송 성공 테스트");
+		//alert("전송 성공 테스트");
 	
 	var strTr = "";
 	$(result.clist).each(function(){
@@ -161,9 +161,9 @@ $(document).ready(function(){
 	
 	$("#cmtBtn").click(function(){   //댓글쓰기 유효성 검사 
 		//alert("ddd");
-		let loginCheck = "<%=midx%>";
+		let midx = "<%=midx%>";
 		//alert(loginCheck);
-		if (loginCheck == "" || loginCheck == "null" || loginCheck == null || loginCheck == 0) {
+		if (midx == "" || midx == "null" || midx == null || midx == 0) {
 			alert("로그인을 해주세요");
 			return;
 		}

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.myaws.myapp.domain.BoardVo;
+import com.myaws.myapp.domain.CommentVo;
 import com.myaws.myapp.domain.SearchCriteria;
 import com.myaws.myapp.persistance.BoardMapper;
 
@@ -136,7 +137,8 @@ public class BoardServiceImpl implements BoardService {
 		
 		return maxBidx;
 	}
-	
+
+
 	
 
 

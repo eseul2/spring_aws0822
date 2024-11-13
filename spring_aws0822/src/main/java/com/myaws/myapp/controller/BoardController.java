@@ -37,6 +37,8 @@ import com.myaws.myapp.service.BoardService;
 import com.myaws.myapp.service.MemberService;
 import com.myaws.myapp.util.MediaUtils;
 import com.myaws.myapp.util.UploadFileUtiles;
+import com.myaws.myapp.util.UserIp;
+
 
 @Controller
 @RequestMapping(value="/board/")
@@ -55,6 +57,9 @@ public class BoardController {
 	
 	@Resource(name="uploadPath") //리소스는 사용할 때 네임값을 빈에 등록된 id 이름으로 해야한다. 이름이 같은 애를 찾아서 주입하는것
 	private String uploadPath;
+	
+	@Autowired(required = false) 
+	private UserIp userIp;
 	
 	
 	//게시글 목록을 조회하고 검색 조건에 맞는 게시글을 화면에 표시하는 메서드
@@ -90,6 +95,14 @@ public class BoardController {
 		return path;
 	}
 	
+	// 글쓰기 화면 보여주기 기능
+	@RequestMapping(value= "test.aws", method=RequestMethod.GET)
+	public String test() {
+		
+		String path = "WEB-INF/board/test";
+		return path;
+	}
+	
 	
 	//게시판에서 글 작성과 파일 업로드 기능을 처리
 	@RequestMapping(value= "boardWriteAction.aws", method=RequestMethod.POST)
@@ -108,7 +121,7 @@ public class BoardController {
 		}
 		String midx = request.getSession().getAttribute("midx").toString();
 		int midx_int = Integer.parseInt(midx); 
-		String ip = getUserIp(request);
+		String ip = userIp.getUserIp(request);
 		
 		bv.setUploadedFilename(uploadedFileName);  // vo에 담아서 가져가기 
 		bv.setMidx(midx_int);
@@ -286,7 +299,7 @@ public class BoardController {
 		
 		String midx = request.getSession().getAttribute("midx").toString();
 		int midx_int = Integer.parseInt(midx); 
-		String ip = getUserIp(request);
+		String ip = userIp.getUserIp(request);
 			
 		bv.setUploadedFilename(uploadedFileName);  // vo에 담아서 가져가기 
 		bv.setIp(ip);
@@ -347,7 +360,7 @@ public class BoardController {
 			
 		String midx = request.getSession().getAttribute("midx").toString();
 		int midx_int = Integer.parseInt(midx); 
-		String ip = getUserIp(request);
+		String ip = userIp.getUserIp(request);
 				
 		bv.setUploadedFilename(uploadedFileName);  // vo에 담아서 가져가기 
 		bv.setMidx(midx_int);
@@ -368,56 +381,6 @@ public class BoardController {
 	}		    
 	
 	
-	
-		
-	
-	
-	
-	
-	// 서버 ip 추출하는 메소드 
-	public String getUserIp(HttpServletRequest request) throws Exception {
-			
-		String ip = null;
-	     //  HttpServletRequest request = 
-	     // ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
-		
-		ip = request.getHeader("X-Forwarded-For");
-	        
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
-	         ip = request.getHeader("Proxy-Client-IP"); 
-	    	} 
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
-	         ip = request.getHeader("WL-Proxy-Client-IP"); 
-	         } 
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
-	    	ip = request.getHeader("HTTP_CLIENT_IP"); 
-	        } 
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
-	    	ip = request.getHeader("HTTP_X_FORWARDED_FOR"); 
-	        }
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
-	    	ip = request.getHeader("X-Real-IP"); 
-	        }
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
-	    	ip = request.getHeader("X-RealIP"); 
-	    	}
-	    if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
-	            ip = request.getHeader("REMOTE_ADDR");
-	        }
-	        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) { 
-	            ip = request.getRemoteAddr(); 
-	        }
-	        
-	        
-	        if(ip.equals("0:0:0:0:0:0:0:1") || ip.equals("127.0.0.1")) {
-	        	InetAddress address = InetAddress.getLocalHost();
-	        	ip = address.getHostAddress();
-	        }
-			return ip;
-		}
-		
-		
-	
-	
+
 
 }
