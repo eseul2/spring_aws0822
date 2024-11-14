@@ -2,19 +2,16 @@
     pageEncoding="UTF-8"%>
 <%@page import = "java.util.*" %>
 <%@ page import="com.myaws.myapp.domain.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
  <%
- ArrayList<BoardVo> blist = (ArrayList<BoardVo>)request.getAttribute("blist");
- //System.out.println("blist==>" + blist);
- PageMaker pm = (PageMaker)request.getAttribute("pm"); //2-39. 뭐야...
- 
+/*  ArrayList<BoardVo> blist = (ArrayList<BoardVo>)request.getAttribute("blist");
+ PageMaker pm = (PageMaker)request.getAttribute("pm"); 
  // 게시물 목록 순서 나타내기 
  int totalCount = pm.getTotalCount();  //전체갯수를 뽑아왔어 
- 
  String keyword = pm.getScri().getKeyword();
  String searchType = pm.getScri().getSearchType();
- 
- String param = "keyword="+keyword+"&searchType="+searchType+""; 
+ String param = "keyword="+keyword+"&searchType="+searchType+"";  */
  %>   
     
 <!DOCTYPE html>
@@ -27,7 +24,7 @@
 <body>
 <header>
 	<h2 class="mainTitle">글목록</h2>
-	<form class="search" name="frm" action="<%=request.getContextPath()%>/board/boardList.aws" method="get">
+	<form class="search" name="frm" action="${pageContext.request.contextPath}/board/boardList.aws" method="get">
 		<select name = "searchType">  <!-- 어떤걸 선택할래? -->
 			<option value = "subject">제목</option>
 			<option value = "writer">작성자</option>
@@ -46,59 +43,55 @@
 			<th>조회</th>
 			<th>추천</th>
 			<th>날짜</th>
-		</tr>   <!--스크립틀릿 : 서버에서 실행될 Java 코드를 JSP 페이지에 삽입하여 동적으로 HTML을 생성하는 역할 -->
-		<% int num = totalCount - (pm.getScri().getPage()-1)*pm.getScri().getPerPageNum();  // 전체갯수중에 15개를 빼면??
-		for(BoardVo bv : blist) { //23. 향상된 for문. blist라는 리스트를 순회하면서 각 요소를 변수에 담아 반복 작업을 수행 
-		 
-			String lvlStr = ""; // 초기화 
-			for(int i=1; i<=bv.getLevel_(); i++) {
-				lvlStr = lvlStr + "&nbsp;&nbsp;"; // html에서 띄어쓰기 기호
-				if(i == bv.getLevel_()) { // i가 level과 같으면     // level이 증가하면 칸을 옮기고 ㄴ자를 표시해라. 
-					lvlStr = lvlStr + "ㄴ"; // ㄴ자 표시를 해준다. 
-				}
-			}
-			
-		%> 
+		</tr>   
+		
+		<c:forEach items="${blist}" var="bv" varStatus="status"> <!-- forEach문을 써서 반복문 실행 -->
 		<tr>
-			<td><%=num %></td>
+			<td>${pm.totalCount-(status.index+(pm.scri.page-1)*pm.scri.perPageNum)}</td> <!-- status index는 0부터 시작한다. -->
 			<td class="title">
-			<%=lvlStr %>
-			<a href="<%=request.getContextPath() %>/board/boardContents.aws?bidx=<%=bv.getBidx() %>"><%=bv.getSubject() %></a></td>
-			<td><%=bv.getWriter() %></td>
-			<td><%=bv.getViewcnt()%></td>
-			<td><%=bv.getRecom()%></td>
-			<td><%=bv.getWriteday() %></td>
-		</tr>
-		<%
-		 num = num-1;
-		}
-		%>
+			<c:forEach var="i" begin="1" end="${bv.level_}" step="1">
+			&nbsp;&nbsp;
+			<c:if test="${i==bv.level_}">
+				ㄴ
+			 </c:if>
+			</c:forEach> 
+			<a href="${pageContext.request.contextPath}/board/boardContents.aws?bidx=${bv.bidx}">${bv.subject}</a></td>
+			<td>${bv.writer}</td>
+			<td>${bv.viewcnt}</td>
+			<td>${bv.recom}</td>
+			<td>${bv.writeday}</td>
+		</tr>		
+		</c:forEach>
 	
 	</table>
 	
 	<div class="btnBox">
-		<a class="btn aBtn" href="<%=request.getContextPath() %>/board/boardWrite.aws">글쓰기</a>
+		<a class="btn aBtn" href="${pageContext.request.contextPath}/board/boardWrite.aws">글쓰기</a>
 	</div>
 	
-	 <!--  2-40. 이거 다 하면 보드Dao로 가세요 -->
-	<div class="page">
-		 <ul>
-		<%if (pm.isPrev()==true) { %>
-		<li><a href="<%=request.getContextPath()%>/board/boardList.aws?page=<%=pm.getStartPage()-1%>&<%=param%>">←</a></li>
-		<% } %>
-		
-		<% for(int i = pm.getStartPage(); i<=pm.getEndPage(); i++) { %>  
-			<li <%if (i==pm.getScri().getPage()) {%> class="on"<%}%> > 
-			<a href="<%=request.getContextPath()%>/board/boardList.aws?page=<%=i%>&<%=param%>"><%=i%> <!-- 해당 검색어가 있으면 그 다음페이지에도 있어야 하니까? -->
-			</a>
-			</li>
-			<% }%>
 	
-		<%if(pm.isNext()==true && pm.getEndPage()>0){ %>
-		<li><a href="<%=request.getContextPath()%>/board/boardList.aws?page=<%=pm.getEndPage()+1%>&<%=param%>">→</a></li>
-	 	<% } %> 
+	<c:set var="queryParam" value="keyword=${pm.scri.keyword}&searchType=${pm.scri.searchType}"></c:set>
+	<div class="page">
+	
+		 <ul>	
+		 
+		<c:if test="${pm.prev == true}"> 
+		<li><a href="${pageContext.request.contextPath}/board/boardList.aws?page=${pm.startPage-1}&${queryParam}">◀</a></li>
+		</c:if>
+
+		<c:forEach var="i" begin="${pm.startPage}" end="${pm.endPage}" step="1">
+		<li <c:if test="${i==pm.scri.page}"> class='on' </c:if> > 
+		<a href="${pageContext.request.contextPath}/board/boardList.aws?page=${i}&${queryParam}">${i}</a>
+		</li>
+		</c:forEach>	
+			
+	 	<c:if test="${pm.next&&pm.endPage>0}">
+	 	<li><a href="${pageContext.request.contextPath}/board/boardList.aws?page=${pm.endPage+1}&${queryParam}">▶</a></li>
+	 	</c:if>
+	 	
 		</ul> 
 	</div>
+	 
 </section>
 
 </body>

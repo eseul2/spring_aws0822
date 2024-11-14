@@ -1,23 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.myaws.myapp.domain.*" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
  
- 
-<!--  request.getAttribute()는 서블릿이나 다른 JSP 페이지에서 전달된 객체를 가져올 때 사용하는 메서드 -->
-<%
- BoardVo bv = (BoardVo)request.getAttribute("bv");   //강제형변환  양쪽형을 맞춰준다 
- %> 
- 
- <%
-String msg = "";
-if(request.getAttribute("msg") != null) {
-msg = (String)request.getAttribute("msg");
-}
-
-if(msg != "") {  
-out.println("<script>alert('"+msg+"');</script>");
-}
-
-%>      
+<!-- 메세지 출력 -->
+<c:set var="msg" value="${requestScope.msg}" />
+<c:if test="${!empty msg}">
+    <script>alert('${msg}');</script>
+</c:if>   
     
 <!DOCTYPE html>
 <html>
@@ -95,7 +84,7 @@ function check() {
 	
 	
 	if(ans == true) {	// 업데이트하고 처리를 하겠다. 
-		fm.action="<%=request.getContextPath()%>/board/boardModifyAction.aws";
+		fm.action="${pageContext.request.contextPath}/board/boardModifyAction.aws";
 		fm.method="post";
 		fm.enctype="multipart/form-data";   //파일을 올리기 위해서 지정해야한다. 
 		fm.submit(); //파일 업로드를 포함한 폼 데이터를 전송할 때 필요한 인코딩 방식을 지정
@@ -106,8 +95,8 @@ function check() {
 
 
 <form name="frm">
-<input type="hidden" name="bidx" value="<%=bv.getBidx()%>">  <!-- bidx값이 수정할때 필요해서 hidden으로 안보이게 한 input에 넣어서 controller로 보낸다. -->
-<input type="hidden" name="midx" value="<%=bv.getMidx()%>">
+<input type="hidden" name="bidx" value="${bv.bidx}">  <!-- bidx값이 수정할때 필요해서 hidden으로 안보이게 한 input에 넣어서 controller로 보낸다. -->
+<input type="hidden" name="midx" value="${bv.midx}">
 <h2>글수정</h2>
 
 <hr>
@@ -117,16 +106,16 @@ function check() {
 		<td class="header">제목</td>
 	</tr>
 	<tr>
-		<td><input type="text" name= "subject" value="<%=bv.getSubject()%>"></td>
+		<td><input type="text" name= "subject" value="${bv.subject}"></td>
 	</tr>
 	<tr>
 		<td>내용</td>
 	</tr>
 	<tr>
-		<td><textarea name="contents"><%=bv.getContents()%></textarea></td>
+		<td><textarea name="contents">${bv.contents}</textarea></td>
 	</tr>
 	<tr>
-		<td style="text-align:center">작성자<input type="text" name="writer" value="<%=bv.getWriter()%>" ></td>
+		<td style="text-align:center">작성자<input type="text" name="writer" value="${bv.writer}" ></td>
 	</tr>
 	<tr>
 		<td style="text-align:center">비밀번호<input type="password" name="password"></td>

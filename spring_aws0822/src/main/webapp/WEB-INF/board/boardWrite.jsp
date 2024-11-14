@@ -1,18 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="com.myaws.myapp.domain.*" %>    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%
-String msg = "";
-if(request.getAttribute("msg") != null) {
-msg = (String)request.getAttribute("msg");
-}
+<!-- 메세지 출력 -->
+<c:set var="msg" value="${requestScope.msg}" />
+<c:if test="${!empty msg}">
+    <script>alert('${msg}');</script>
+</c:if> 
 
-if(msg != "") {  
-out.println("<script>alert('"+msg+"');</script>");
-}
-
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -87,7 +83,7 @@ function check() {
 	var ans = confirm("저장하시겠습니까?");  // 함수의 값은 참과 거짓 true false로 나눈다. 
 	
 	if(ans == true) {	
-		fm.action="<%=request.getContextPath()%>/board/boardWriteAction.aws"; /* 이거 작성하고 컨트롤러로 가세요 */
+		fm.action="${pageContext.request.contextPath}/board/boardWriteAction.aws"; /* 이거 작성하고 컨트롤러로 가세요 */
 		fm.method="post";
 		fm.enctype="multipart/form-data";   //파일을 올리기 위해서 지정해야한다. 
 		fm.submit();	//파일 업로드를 포함한 폼 데이터를 전송할 때 필요한 인코딩 방식을 지정

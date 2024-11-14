@@ -1,19 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="com.myaws.myapp.domain.BoardVo" %> 
-<% BoardVo bv = (BoardVo)request.getAttribute("bv");%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
- <%
-String msg = "";
-if(request.getAttribute("msg") != null) {
-msg = (String)request.getAttribute("msg");
-}
-
-if(msg != "") {  
-out.println("<script>alert('"+msg+"');</script>");
-}
-
-%> 
+<!-- 메세지 출력 -->
+<c:set var="msg" value="${requestScope.msg}" />
+<c:if test="${!empty msg}">
+    <script>alert('${msg}');</script>
+</c:if>  
  
 <!DOCTYPE html>
 <html>
@@ -85,7 +79,7 @@ function check() {
 	  let ans = confirm("저장하시겠습니까?");
 	  
 	  if (ans == true) {
-		  fm.action="<%=request.getContextPath()%>/board/boardReplyAction.aws";
+		  fm.action="${pageContext.request.contextPath}/board/boardReplyAction.aws";
 		  fm.method="post";
 		  fm.enctype="multipart/form-data";   //파일을 올리기 위해서 지정해야한다. 
 		  fm.submit();
@@ -104,10 +98,10 @@ function check() {
 <hr>
 
 <form name="frm">
-<input type= "hidden" name="bidx" value="<%=bv.getBidx()%>">
-<input type= "hidden" name="originbidx" value="<%=bv.getOriginbidx()%>">
-<input type= "hidden" name="depth" value="<%=bv.getDepth()%>">
-<input type= "hidden" name="level_" value="<%=bv.getLevel_()%>"> 
+<input type= "hidden" name="bidx" value="${bv.bidx}">
+<input type= "hidden" name="originbidx" value="${bv.originbidx}">
+<input type= "hidden" name="depth" value="${bv.depth}">
+<input type= "hidden" name="level_" value="${bv.level_}"> 
 
 <table>
 	<tr>
