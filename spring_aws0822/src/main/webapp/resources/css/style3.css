@@ -74,7 +74,7 @@
 }
 
 .banner-image img {
-    width: 800px; /* 이미지 너비 */
+    width: 550px; /* 이미지 너비 */
     height: 350px; /* 이미지 높이 */
     object-fit: cover; /* 이미지 비율 유지 */
     border-radius: 10px; /* 모서리를 둥글게 */
@@ -99,7 +99,7 @@
 }
 
 
-/* 버튼 스타일 */
+/* 배너쪽 버튼 스타일 */
 .banner-text button {
     margin-top: 20px; /* 텍스트와 버튼 사이 간격 */
     padding: 10px 20px;
@@ -111,10 +111,134 @@
     cursor: pointer; /* 버튼 클릭 가능하게 설정 */
     transition: background-color 0.3s ease;
 }
-
 .banner-text button:hover {
     background-color: #e67e22; /* 마우스를 올렸을 때 색상 변경 */
 }
+
+
+
+/* 배너 아래 빵집추천 게시물 스타일 */
+.recommend-section {
+    margin: 40px 0;
+    text-align: center;
+}
+
+.recommend-section h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.card-container {
+    display: flex;
+    justify-content: space-between; /* 카드 간의 간격을 일정하게 */
+    gap: 15px; /* 카드 간격 조정 (너무 크지 않도록) */
+    flex-wrap: wrap; /* 카드가 화면을 넘어가면 자동으로 줄 바꿈 */
+    margin: 0 auto; /* 중앙 정렬 */
+    max-width: 1200px; /* 최대 너비를 설정해서 너무 커지지 않도록 */
+    margin-bottom: 40px; /* 카드 밑에 간격 띄우기 */
+}
+
+.card {
+    width: 22%; /* 한 줄에 4개가 잘 보이도록 너비 설정 (조정됨) */
+    height: 330px; /* 카드의 높이 조정 */
+    margin-bottom: 20px; /* 카드 간의 세로 간격 */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* 호버 시 카드 효과 */
+.card:hover {
+    transform: translateY(-5px); /* 호버 시 카드가 살짝 위로 올라오는 효과 */
+}
+
+.card img {
+    width: 100%; /* 이미지가 카드의 너비를 채우도록 */
+    height: 200px; /* 이미지의 높이 */
+    object-fit: cover; /* 이미지가 영역에 맞게 잘리도록 */
+}
+
+.card-content {
+    padding: 10px; /* 카드 안의 콘텐츠 여백 */
+}
+
+.card-content h3 {
+    font-size: 1.2rem;
+    font-weight: bold; /* 제목을 굵은 글씨로 */
+    margin-bottom: 10px;
+}
+
+.card-content p {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* 버튼 스타일 */
+.card-content .btn {
+    display: block;
+    width: 100%;
+    background: #f76c6c;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+
+.card-content .btn:hover {
+    background: #ff5656;
+}
+
+
+
+
+/* 모달 팝업 스타일 */
+.modal {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed; /* 화면에 고정 */
+    z-index: 1; /* 가장 위에 표시 */
+    left: 0;
+    top: 0;
+    width: 100%; /* 화면 크기 */
+    height: 100%;
+    overflow: auto; /* 내용이 많을 경우 스크롤 */
+    background-color: rgba(0, 0, 0, 0.4); /* 반투명 검정 배경 */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 화면 중앙에 표시 */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* 모달 너비 */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+
+
+
+
 
 
 
