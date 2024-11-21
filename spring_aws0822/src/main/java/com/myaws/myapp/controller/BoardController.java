@@ -20,8 +20,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.header.Header;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -139,6 +142,23 @@ public class BoardController {
 		return path;
 	}
 	
+	
+	
+	@ResponseBody
+	@PostMapping("/boardWriteActionReact.aws")
+	public JSONObject boardWriteActionReact(@RequestBody BoardVo bv) {
+		
+		JSONObject js = new JSONObject();
+		int value = boardService.boardInsert(bv);
+		
+		if(value==2) { // 성공
+			js.put("result", "success");
+		}else { // 실패
+			js.put("result","fail");
+		}
+		return js;
+	}
+	
 
 	
 	// 글 내용 보여주기 기능
@@ -242,7 +262,7 @@ public class BoardController {
 			HttpSession session,
 			RedirectAttributes rttr
 			){
-		
+
 		BoardVo bv = boardService.boardSelectOne(bidx);
 	      int midx = Integer.parseInt(session.getAttribute("midx").toString());
 	      int value = boardService.boardDelete(bidx,midx,password);

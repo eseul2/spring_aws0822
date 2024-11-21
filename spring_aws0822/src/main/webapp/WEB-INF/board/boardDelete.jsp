@@ -47,7 +47,7 @@ function check() {
 </header>
 
 <form name="frm">
-<input type="hidden" name="bidx" value="${bv.bidx}">
+<input type="hidden" name="bidx" value="${bidx}">
 	<table class="writeTable">
 		<tr>
 			<th>비밀번호</th>
@@ -57,7 +57,7 @@ function check() {
 	
 	<div class="btnBox">
 		<button type="button" class="btn" onclick="check();">저장</button>
-		<a class="btn aBtn" href="#"  onclick="history.back();">취소</a>
+		<a class="btn aBtn" href="${pageContext.request.contextPath}/board/boardContents.aws?bidx=${bidx}"  onclick="history.back();">취소</a>
 	</div>	
 </form>
 

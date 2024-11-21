@@ -4,15 +4,7 @@
 <%@ page import="com.myaws.myapp.domain.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
- <%
-/*  ArrayList<BoardVo> blist = (ArrayList<BoardVo>)request.getAttribute("blist");
- PageMaker pm = (PageMaker)request.getAttribute("pm"); 
- // 게시물 목록 순서 나타내기 
- int totalCount = pm.getTotalCount();  //전체갯수를 뽑아왔어 
- String keyword = pm.getScri().getKeyword();
- String searchType = pm.getScri().getSearchType();
- String param = "keyword="+keyword+"&searchType="+searchType+"";  */
- %>   
+
     
 <!DOCTYPE html>
 <html>
