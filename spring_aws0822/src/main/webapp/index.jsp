@@ -24,7 +24,8 @@ ${memberName}&nbsp;
 <a href ="${pageContext.request.contextPath}/member/memberList.aws">회원 목록 가기</a>
 <br>
 <a href ="${pageContext.request.contextPath}/board/boardList.aws">게시판 목록가기</a>
-<a href ="${pageContext.request.contextPath}/board/test.aws">테스트</a>
+<a href ="${pageContext.request.contextPath}/board/test.aws">메인페이지</a>
+<a href ="${pageContext.request.contextPath}/board/login.aws">로그인페이지</a>
 </body>
 </html>
 

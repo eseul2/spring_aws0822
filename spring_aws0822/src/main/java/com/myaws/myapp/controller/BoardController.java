@@ -98,11 +98,19 @@ public class BoardController {
 		return path;
 	}
 	
-	// 글쓰기 화면 보여주기 기능
+	// 메인페이지
 	@RequestMapping(value= "test.aws", method=RequestMethod.GET)
 	public String test() {
 		
 		String path = "WEB-INF/board/test";
+		return path;
+	}
+	
+	// 로그인페이지
+	@RequestMapping(value= "login.aws", method=RequestMethod.GET)
+	public String login() {
+		
+		String path = "WEB-INF/board/login";
 		return path;
 	}
 	
